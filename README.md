@@ -85,4 +85,8 @@ Controls go to `/control?action=playpause|next|prev|volume&value=40`. The full f
 - [LVGL](https://lvgl.io) and [Arduino_GFX](https://github.com/moononournation/Arduino_GFX) for drawing, [ArduinoJson](https://arduinojson.org) (MIT, included as a single header) for the feed.
 - Fonts: [Kode Mono](https://github.com/isaozler/kode-mono) (SIL Open Font License), converted with lv_font_conv.
 
+## License
+
+MIT, see [LICENSE](LICENSE). ArduinoJson, LVGL and Arduino_GFX keep their own licenses, and the Kode Mono fonts are under the SIL Open Font License.
+
 Not affiliated with Waveshare, Apple, Spotify, Roon Labs or Plex.
