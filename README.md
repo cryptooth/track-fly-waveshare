@@ -18,7 +18,7 @@ It reads the feed of **[Track Fly](https://trackfly.stream)**, a free macOS menu
 - **One tap for controls:** previous, play/pause, next, and a row of dots that becomes the volume.
 - **Follows a room:** pick a Roon zone or a player on the screen or on its web page, or let it show whatever plays.
 - **A clock when nothing plays,** a night mode, and it turns the picture when you flip it over (motion sensor).
-- **Sleeps on battery:** after a few idle minutes it goes dark and checks every two minutes whether music is back.
+- **Sleeps on battery:** after a few idle minutes it goes dark and checks every two minutes whether music is back. Plugged into a computer it stays awake; on a USB wall charger the board cannot tell, so turn sleep off in its settings.
 - **Finds the Mac by itself:** if the Mac's address changes, it looks for Track Fly on the network (`_trackfly._tcp`).
 - **Updates in one click:** Track Fly fetches new firmware from trackfly.stream and offers it to every display it sees. You can also upload a `.bin` on the display's own web page.
 - **Set up from your phone** with a QR code. No app, no cloud, no account.

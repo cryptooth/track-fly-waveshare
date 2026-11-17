@@ -112,7 +112,7 @@ static const char CONTROL_HTML[] PROGMEM = R"HTML(<!doctype html><html><head><me
 <label>Orientation</label><select id=rotate><option value=2>Automatic (turn the device over)</option><option value=0>Normal</option><option value=1>Upside down</option></select>
 <label class=chk><input type=checkbox id=sleep> On battery, sleep when nothing plays</label>
 <div class=seg style="align-items:center;margin-top:8px;color:var(--dim);font-size:13px">after <select id=sleepm style="width:auto;flex:0 0 auto;padding:6px 8px"><option>2</option><option>5</option><option>15</option><option>30</option><option>60</option></select> minutes</div>
-<p class=hint>Saves the battery (the clock is not shown then). It checks every 2 minutes and wakes when music starts; BOOT or PWR wakes it at once. On USB it never sleeps.</p>
+<p class=hint>Saves the battery (the clock is not shown then). It checks every 2 minutes and wakes when music starts; BOOT or PWR wakes it at once. Plugged into a computer it never sleeps. On a USB wall charger the display cannot tell it is not on battery, so turn this off there.</p>
 <label class=chk><input type=checkbox id=night> Night mode</label>
 <div class=seg style="align-items:center;margin-top:8px"><input type=time id=nfrom style="flex:1;padding:9px;border-radius:7px;border:1px solid var(--line);background:var(--card);color:var(--tx);font:inherit"><span style="color:var(--dim)">&ndash;</span><input type=time id=nto style="flex:1;padding:9px;border-radius:7px;border:1px solid var(--line);background:var(--card);color:var(--tx);font:inherit"></div>
 <label>At night the screen</label><select id=nmode><option value=0>dims to the lowest step (25%)</option><option value=1>goes dark (a touch lights it for 15 s)</option></select>

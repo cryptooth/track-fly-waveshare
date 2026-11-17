@@ -164,9 +164,10 @@ void hwTick() {
 }
 
 // ---------------- Battery ----------------
-// LiPo voltage -> percent (rough discharge curve)
+// LiPo voltage -> percent (rough discharge curve). On this board a cell that has sat on the
+// charger all night reads 4.10 V (charger cut-off and divider tolerance), so that is 100 %.
 static int lipoPct(float v) {
-  static const float V[] = {3.30, 3.45, 3.60, 3.68, 3.74, 3.80, 3.87, 3.95, 4.03, 4.11, 4.18};
+  static const float V[] = {3.30, 3.45, 3.60, 3.68, 3.73, 3.78, 3.84, 3.90, 3.97, 4.04, 4.10};
   if (v <= V[0]) return 0;
   for (int i = 1; i < 11; i++) {
     if (v < V[i]) return (int)((i - 1) * 10 + (v - V[i - 1]) / (V[i] - V[i - 1]) * 10);
@@ -184,8 +185,9 @@ void batteryUpdate() {
   float v = analogReadMilliVolts(PIN_BAT) / 1000.0f * 3.0f;
   filt = (filt == 0) ? v : filt * 0.85f + v * 0.15f;
   batteryVolts = filt;
-  // The board has no charge-status pin, so "charging" = a USB host is talking to us,
-  // or (wall charger) the voltage climbed over the last 3 minutes.
+  // The board has no charge-status or VBUS pin, so "charging" = a USB host is talking to us,
+  // or (wall charger) the voltage climbed over the last 3 minutes. A full cell on a wall
+  // charger looks just like a full cell on its own; that is what the sleep checkbox is for.
   static float ref = 0; static uint32_t refAt = 0; static bool rising = false;
   if (!refAt) { ref = filt; refAt = millis(); }
   else if (millis() - refAt > 180000) { rising = filt - ref > 0.015f; ref = filt; refAt = millis(); }
