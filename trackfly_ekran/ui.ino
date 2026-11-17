@@ -49,6 +49,7 @@ static String topText;
 // ---------- helpers ----------
 static lv_obj_t *mkLabel(lv_obj_t *parent, const lv_font_t *f, lv_color_t c) {
   lv_obj_t *l = lv_label_create(parent);
+  lv_label_set_text(l, "");          // LVGL starts a label as "Text"
   lv_obj_set_style_text_font(l, f, 0);
   lv_obj_set_style_text_color(l, c, 0);
   return l;
@@ -595,7 +596,7 @@ static void updateTop() {
       if (pos.length()) t += "  \xC2\xB7  " + pos;
     }
     if (cur.state == "paused") t += "  \xC2\xB7  paused";
-  } else if (cfg.source.length()) t = sourceName(cfg.source);
+  } else if (cfg.zone.length() || cfg.source.length()) t = targetLabel();   // the chosen source/zone
   t = upper(t);
   if (t != topText) { topText = t; lv_label_set_text(lblTop, t.c_str()); }
 }

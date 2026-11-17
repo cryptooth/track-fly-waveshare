@@ -18,7 +18,7 @@
  *        partition app3M_fat9M_16MB which has two OTA slots)
  */
 
-#define FW_VERSION "0.6.12"
+#define FW_VERSION "0.6.13"
 
 #include <Arduino.h>
 #include <Preferences.h>
