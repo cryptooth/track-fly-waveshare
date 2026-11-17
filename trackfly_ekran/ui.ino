@@ -646,13 +646,24 @@ static void updateProgress() {
   lv_obj_set_style_shadow_opa(dotLift, paused ? LV_OPA_TRANSP : LV_OPA_60, 0);
 }
 
+// Local time without Arduino's getLocalTime(): with a 0 ms timeout that one fails
+// whenever millis() ticks during the call. The clock then showed --:-- and, as the
+// minute had not changed, stayed so until the next minute.
+bool localNow(struct tm &t) {
+  time_t now = time(nullptr);
+  if (now < 1700000000) return false;        // not set by NTP yet
+  localtime_r(&now, &t);
+  return true;
+}
+
 static void updateClock() {
   if (playMode) return;
   static int lastMin = -1;
   struct tm t;
-  if (!getLocalTime(&t, 0)) {
+  if (!localNow(t)) {
     setText(lblClock, "--:--");
     setText(lblDate, "");
+    lastMin = -1;
   } else if (t.tm_min != lastMin) {
     lastMin = t.tm_min;
     char b[8], d[24];

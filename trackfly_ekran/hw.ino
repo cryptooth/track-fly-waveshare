@@ -141,7 +141,7 @@ static void autoRotate() {
 static void nightUpdate() {
   bool on = false;
   struct tm t;
-  if (cfg.night && getLocalTime(&t, 0)) {
+  if (cfg.night && localNow(t)) {
     int m = t.tm_hour * 60 + t.tm_min;
     on = cfg.nightFrom <= cfg.nightTo ? (m >= cfg.nightFrom && m < cfg.nightTo)
                                       : (m >= cfg.nightFrom || m < cfg.nightTo);   // across midnight
@@ -267,6 +267,7 @@ void powerOff() {
 // asks Track Fly once, and lights up only if something is playing.
 #include <driver/rtc_io.h>
 bool quietWake = false;
+bool sleepWake = false;
 
 void deepSleepNow() {
   Serial.println("deep sleep");

@@ -6,7 +6,7 @@ Firmware that turns the [Waveshare ESP32-S3-Touch-LCD-3.49](https://www.waveshar
 
 It reads the feed of **[Track Fly](https://trackfly.stream)**, a free macOS menu bar app that turns what is playing in Apple Music, Spotify, Roon and Plex into one JSON feed on your local network. You need Track Fly running on a Mac on the same network.
 
-**Website and downloads: [trackfly.stream](https://trackfly.stream)** · Ready-made firmware: [trackfly.stream/firmware](https://trackfly.stream/firmware/)
+**Website and downloads: [trackfly.stream](https://trackfly.stream)** · Ready-made firmware: [trackfly.stream/firmware](https://trackfly.stream/firmware/) · Smaller, no touch: [track-fly-oled](https://github.com/cryptooth/track-fly-oled) for an ESP32-C3 and a 256×64 OLED
 
 | Nothing playing | Playing | Controls |
 |---|---|---|

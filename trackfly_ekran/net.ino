@@ -15,6 +15,11 @@ static NetMode netMode = NET_IDLE;
 static char apSsid[24];
 static String savedSsid, savedPass;
 static uint32_t connectStart = 0, showMainAt = 0, lastRetry = 0;
+// The access point we were on before deep sleep: joining it directly (channel + BSSID)
+// skips the scan and saves a couple of seconds after a wake.
+RTC_DATA_ATTR static uint8_t rtcBssid[6];
+RTC_DATA_ATTR static int32_t rtcChannel = 0;
+static bool fastJoin = false;
 
 bool wifiReady() { return netMode == NET_STA && WiFi.status() == WL_CONNECTED; }
 
@@ -56,8 +61,10 @@ static void beginConnect() {
   WiFi.setHostname(cfg.name.c_str());
   WiFi.setSleep(false);
   WiFi.setAutoReconnect(true);
-  WiFi.begin(savedSsid.c_str(), savedPass.c_str());
-  uiShowMessage("Connecting", savedSsid.c_str());
+  fastJoin = sleepWake && rtcChannel > 0;
+  if (fastJoin) WiFi.begin(savedSsid.c_str(), savedPass.c_str(), rtcChannel, rtcBssid);
+  else WiFi.begin(savedSsid.c_str(), savedPass.c_str());
+  if (!sleepWake) uiShowMessage("Connecting", savedSsid.c_str());
 }
 
 static void onConnected() {
@@ -67,9 +74,15 @@ static void onConnected() {
   WiFi.mode(WIFI_STA);
   startMdns();
   applyClock();
-  String line = cfg.name + ".local\n" + WiFi.localIP().toString();
-  uiShowMessage("Connected", line.c_str());
-  showMainAt = millis() + 4000;
+  rtcChannel = WiFi.channel();
+  memcpy(rtcBssid, WiFi.BSSID(), 6);
+  if (sleepWake) {
+    showMainAt = 0;              // already on the main screen
+  } else {
+    String line = cfg.name + ".local\n" + WiFi.localIP().toString();
+    uiShowMessage("Connected", line.c_str());
+    showMainAt = millis() + 4000;
+  }
   feedKick();
   Serial.println("WiFi OK " + WiFi.localIP().toString());
 }
@@ -334,6 +347,12 @@ void netLoop() {
   switch (netMode) {
     case NET_CONNECTING:
       if (WiFi.status() == WL_CONNECTED) onConnected();
+      else if (fastJoin && millis() - connectStart > 6000) {
+        fastJoin = false;            // the router moved channel: join the normal way
+        rtcChannel = 0;
+        WiFi.disconnect();
+        WiFi.begin(savedSsid.c_str(), savedPass.c_str());
+      }
       else if (millis() - connectStart > CONNECT_TIMEOUT_MS) {
         String why = "Can't reach " + savedSsid;
         startSetupPortal(why.c_str());

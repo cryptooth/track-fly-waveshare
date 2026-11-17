@@ -60,6 +60,7 @@ void idleSleep(bool on);
 void hwTick();
 void backlightTest();
 void deepSleepNow();
+extern bool sleepWake;            // woke from deep sleep (button or timer): skip the start-up screens
 extern bool quietWake;            // woke from deep sleep by the timer: screen stays dark unless music plays
 bool nightNow();
 extern int  batteryPct;
@@ -95,6 +96,7 @@ void uiShowMain();
 void uiToast(const String &s, uint32_t ms = 1800);
 void uiShowInfo();
 void uiApplySettings();
+bool localNow(struct tm &t);     // false until NTP has set the clock
 
 // ---------- settings (trackfly_ekran.ino) ----------
 void settingsLoad();

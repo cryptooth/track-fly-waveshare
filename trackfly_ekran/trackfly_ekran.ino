@@ -18,7 +18,7 @@
  *        partition app3M_fat9M_16MB which has two OTA slots)
  */
 
-#define FW_VERSION "0.6.13"
+#define FW_VERSION "0.6.15"
 
 #include <Arduino.h>
 #include <Preferences.h>
@@ -121,7 +121,9 @@ void serialCommands() {
 
 void setup() {
   Serial.begin(115200);
-  quietWake = esp_sleep_get_wakeup_cause() == ESP_SLEEP_WAKEUP_TIMER;
+  esp_sleep_wakeup_cause_t wake = esp_sleep_get_wakeup_cause();
+  quietWake = wake == ESP_SLEEP_WAKEUP_TIMER;
+  sleepWake = wake == ESP_SLEEP_WAKEUP_TIMER || wake == ESP_SLEEP_WAKEUP_EXT1;
   Serial.printf("\nTrack Fly display v%s, reset reason %d%s\n", FW_VERSION, (int)esp_reset_reason(),
                 quietWake ? ", timer wake" : "");
   WiFi.persistent(false);   // the WiFi driver must not write flash while the display runs
@@ -130,7 +132,9 @@ void setup() {
   settingsLoad();
   hwInit();        // power latch, display, LVGL, touch, backlight, buttons, battery
   uiInit();
-  uiShowMessage("Starting", "v" FW_VERSION);
+  // Waking from deep sleep is a restart for the chip, but not for the person holding
+  // it: go straight to the clock (the time survives the sleep) and connect quietly.
+  if (sleepWake) uiShowMain(); else uiShowMessage("Starting", "v" FW_VERSION);
   feedBegin();     // background task, waits for WiFi
   netBegin();      // connects or opens the setup portal
 }
