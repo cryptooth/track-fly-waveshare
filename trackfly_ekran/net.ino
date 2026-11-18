@@ -84,6 +84,7 @@ static void onConnected() {
     showMainAt = millis() + 4000;
   }
   feedKick();
+  bleConnected();                  // set up over Bluetooth: tell the Mac, then restart without it
   Serial.println("WiFi OK " + WiFi.localIP().toString());
 }
 
@@ -94,9 +95,11 @@ void startSetupPortal(const char *why) {
   WiFi.softAP(apSsid, AP_PASS);
   dnsServer.start(53, "*", WiFi.softAPIP());
   lastRetry = millis();
-  String line = String("Join ") + apSsid + "  \xC2\xB7  password " AP_PASS "  \xC2\xB7  then open 192.168.4.1";
+  String line = String("Join ") + apSsid + "  \xC2\xB7  password " AP_PASS "  \xC2\xB7  then open 192.168.4.1"
+                "\nOr let Track Fly on your Mac set it up.";
   String qr = String("WIFI:T:WPA;S:") + apSsid + ";P:" AP_PASS ";;";
   uiShowMessage(why, line.c_str(), qr.c_str());
+  bleSetupPortal(why);             // and the same over Bluetooth, for Track Fly on a Mac
   Serial.printf("Setup portal %s\n", apSsid);
 }
 
@@ -344,6 +347,7 @@ void netBegin() {
 
 void netLoop() {
   server.handleClient();
+  bleLoop();
   switch (netMode) {
     case NET_CONNECTING:
       if (WiFi.status() == WL_CONNECTED) onConnected();
@@ -354,7 +358,7 @@ void netLoop() {
         WiFi.begin(savedSsid.c_str(), savedPass.c_str());
       }
       else if (millis() - connectStart > CONNECT_TIMEOUT_MS) {
-        String why = "Can't reach " + savedSsid;
+        String why = bleJoinProblem(savedSsid);
         startSetupPortal(why.c_str());
       }
       break;

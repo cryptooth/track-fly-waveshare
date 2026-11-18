@@ -77,6 +77,14 @@ bool wifiReady();
 String feedBase();
 void netSaveWifi(const String &ssid, const String &pass);
 
+// ---------- ble.ino ----------
+void bleStart();
+void bleLoop();
+bool bleActive();
+void bleSetupPortal(const char *why);
+void bleConnected();
+String bleJoinProblem(const String &ssid);
+
 // ---------- feed.ino ----------
 void feedBegin();
 void feedKick();

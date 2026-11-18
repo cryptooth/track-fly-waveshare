@@ -40,6 +40,8 @@ Or build it yourself (below).
 3. Pick your home network, type its password, check the Track Fly address, and press Save.
 4. After it connects, its settings page is at `http://track-fly-xxxx.local` (same 4 characters).
 
+Have a Mac with Track Fly 1.9 or newer? Skip the phone: Track Fly finds the display over Bluetooth and shows "New display found" in its menu. Pick your network, type the password once, and Track Fly sends it along with its own address.
+
 On battery: after fitting the battery, connect USB once to wake the board; after that it runs on the battery. Long-press PWR to turn it on.
 
 ## Controls

@@ -5,6 +5,8 @@
  *
  *  - First boot: the device opens its own WiFi "TRACKFLY-XXXX" (password
  *    trackfly) and shows a QR code. Join it, pick the home network, done.
+ *    Or, with no phone: Track Fly on a Mac finds the display over Bluetooth
+ *    and sends it the network and its own address (ble.ino).
  *  - Then open http://track-fly-xxxx.local (or the IP) for settings and
  *    firmware updates.
  *
@@ -18,7 +20,7 @@
  *        partition app3M_fat9M_16MB which has two OTA slots)
  */
 
-#define FW_VERSION "0.6.15"
+#define FW_VERSION "0.7.0"
 
 #include <Arduino.h>
 #include <Preferences.h>
